@@ -1,0 +1,1 @@
+{"product_id": {"S": "COFFEE-001"}, "product_name": {"S": "Coffee Maker"}, "stock_quantity": {"N": "75"}, "reserved_quantity": {"N": "0"}, "reorder_threshold": {"N": "10"}, "updated_at": {"S": "2026-07-06T00:00:00"}}

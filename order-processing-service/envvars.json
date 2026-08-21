@@ -1,0 +1,30 @@
+﻿[
+    {
+        "name": "SQS_NOTIFICATIONS_QUEUE_URL",
+        "value": "https://sqs.ap-south-1.amazonaws.com/029223413210/smartretailx-notification-queue"
+    },
+    {
+        "name": "AWS_REGION",
+        "value": "ap-south-1"
+    },
+    {
+        "name": "DYNAMODB_PRODUCTS_TABLE",
+        "value": "smartretailx-products"
+    },
+    {
+        "name": "DYNAMODB_INVENTORY_TABLE",
+        "value": "smartretailx-inventory"
+    },
+    {
+        "name": "SQS_ORDERS_QUEUE_URL",
+        "value": "https://sqs.ap-south-1.amazonaws.com/029223413210/smartretailx-orders-queue"
+    },
+    {
+        "name": "SNS_ORDER_EVENTS_TOPIC_ARN",
+        "value": "arn:aws:sns:ap-south-1:029223413210:smartretailx-order-events"
+    },
+    {
+        "name": "SERVICE_PORT",
+        "value": "8003"
+    }
+]

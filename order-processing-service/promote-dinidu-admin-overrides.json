@@ -1,0 +1,12 @@
+{
+    "containerOverrides": [
+        {
+            "name": "order-processing-service",
+            "command": [
+                "python",
+                "-c",
+                "import os,psycopg2; conn=psycopg2.connect(os.environ['DATABASE_URL']); cur=conn.cursor(); cur.execute(\"UPDATE users SET role = 'admin' WHERE email = 'dinidusehara@gmail.com'\"); conn.commit(); print('Rows updated:', cur.rowcount); cur.close(); conn.close()"
+            ]
+        }
+    ]
+}

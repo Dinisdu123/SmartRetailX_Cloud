@@ -1,0 +1,93 @@
+{
+    "containerDefinitions":  [
+                                 {
+                                     "name":  "order-processing-service",
+                                     "image":  "029223413210.dkr.ecr.ap-south-1.amazonaws.com/smartretailx/order-processing-service:fix-requests-01",
+                                     "cpu":  0,
+                                     "portMappings":  [
+                                                          {
+                                                              "containerPort":  8003,
+                                                              "hostPort":  8003,
+                                                              "protocol":  "tcp"
+                                                          }
+                                                      ],
+                                     "essential":  true,
+                                     "environment":  [
+                                                         {
+                                                             "name":  "SQS_NOTIFICATIONS_QUEUE_URL",
+                                                             "value":  "https://sqs.ap-south-1.amazonaws.com/029223413210/smartretailx-notification-queue"
+                                                         },
+                                                         {
+                                                             "name":  "AWS_REGION",
+                                                             "value":  "ap-south-1"
+                                                         },
+                                                         {
+                                                             "name":  "DYNAMODB_PRODUCTS_TABLE",
+                                                             "value":  "smartretailx-products"
+                                                         },
+                                                         {
+                                                             "name":  "DYNAMODB_INVENTORY_TABLE",
+                                                             "value":  "smartretailx-inventory"
+                                                         },
+                                                         {
+                                                             "name":  "SNS_ORDER_EVENTS_TOPIC_ARN",
+                                                             "value":  "arn:aws:sns:ap-south-1:029223413210:smartretailx-order-events"
+                                                         },
+                                                         {
+                                                             "name":  "SERVICE_PORT",
+                                                             "value":  "8003"
+                                                         },
+                                                         {
+                                                             "name":  "SQS_QUEUE_URL",
+                                                             "value":  "https://sqs.ap-south-1.amazonaws.com/029223413210/smartretailx-orders-queue"
+                                                         },
+                                                         {
+                                                             "name":  "PRODUCT_SERVICE_URL",
+                                                             "value":  "http://product-catalogue-service.smartretailx.local:8002"
+                                                         }
+                                                     ],
+                                     "mountPoints":  [
+
+                                                     ],
+                                     "volumesFrom":  [
+
+                                                     ],
+                                     "logConfiguration":  {
+                                                              "logDriver":  "awslogs",
+                                                              "options":  {
+                                                                              "awslogs-group":  "/ecs/smartretailx/order-processing-service",
+                                                                              "awslogs-region":  "ap-south-1",
+                                                                              "awslogs-stream-prefix":  "order-processing-service"
+                                                                          }
+                                                          },
+                                     "systemControls":  [
+
+                                                        ],
+                                     "secrets":  [
+                                                     {
+                                                         "name":  "DATABASE_URL",
+                                                         "valueFrom":  "arn:aws:ssm:ap-south-1:029223413210:parameter/smartretailx/order-processing-service/DATABASE_URL"
+                                                     },
+                                                     {
+                                                         "name":  "JWT_SECRET_KEY",
+                                                         "valueFrom":  "arn:aws:ssm:ap-south-1:029223413210:parameter/smartretailx/order-processing-service/JWT_SECRET_KEY"
+                                                     }
+                                                 ]
+                                 }
+                             ],
+    "family":  "smartretailx-order-processing-service",
+    "taskRoleArn":  "arn:aws:iam::029223413210:role/smartretailx-ecs-task-role",
+    "executionRoleArn":  "arn:aws:iam::029223413210:role/smartretailx-ecs-execution-role",
+    "networkMode":  "awsvpc",
+    "volumes":  [
+
+                ],
+    "placementConstraints":  [
+
+                             ],
+    "requiresCompatibilities":  [
+                                    "FARGATE"
+                                ],
+    "cpu":  "256",
+    "memory":  "512"
+}

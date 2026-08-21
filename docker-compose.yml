@@ -1,0 +1,141 @@
+version: "3.8"
+
+services:
+  dynamodb-local:
+    image: amazon/dynamodb-local
+    container_name: dynamodb-local
+    ports:
+      - "8000:8000"
+    command: "-jar DynamoDBLocal.jar -sharedDb -dbPath /home/dynamodblocal/data"
+    volumes:
+      - C:/dynamodb-data:/home/dynamodblocal/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  elasticmq:
+    image: softwaremill/elasticmq-native
+    container_name: elasticmq
+    ports:
+      - "9324:9324"
+      - "9325:9325"
+    volumes:
+      - ./elasticmq/elasticmq.conf:/opt/elasticmq.conf
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9324 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  user-management-service:
+    build: ./user-management-service
+    container_name: user-management-service
+    ports:
+      - "8001:8001"
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@host.docker.internal:5432/userdb
+      - JWT_SECRET_KEY=smartretailx-super-secret-jwt-key-2024
+    depends_on:
+      - dynamodb-local
+      - elasticmq
+    healthcheck:
+      test:
+        ["CMD-SHELL", "curl -f http://localhost:8001/api/v1/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  product-catalogue-service:
+    build: ./product-catalogue-service
+    container_name: product-catalogue-service
+    ports:
+      - "8002:8002"
+    environment:
+      - AWS_REGION=us-east-1
+      - DYNAMODB_ENDPOINT=http://dynamodb-local:8000
+      - DYNAMODB_TABLE=products
+      - AWS_ACCESS_KEY_ID=local
+      - AWS_SECRET_ACCESS_KEY=local
+      - JWT_SECRET_KEY=smartretailx-super-secret-jwt-key-2024
+    depends_on:
+      - dynamodb-local
+      - elasticmq
+    healthcheck:
+      test:
+        ["CMD-SHELL", "curl -f http://localhost:8002/api/v1/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  order-processing-service:
+    build: ./order-processing-service
+    container_name: order-processing-service
+    ports:
+      - "8003:8003"
+    environment:
+      - DATABASE_URL=postgresql://postgres:password@host.docker.internal:5432/orderdb
+      - JWT_SECRET_KEY=smartretailx-super-secret-jwt-key-2024
+      - AWS_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=local
+      - AWS_SECRET_ACCESS_KEY=local
+      - SQS_ENDPOINT=http://elasticmq:9324
+      - SQS_QUEUE_URL=http://elasticmq:9324/000000000000/orders-queue
+    depends_on:
+      - dynamodb-local
+      - elasticmq
+    healthcheck:
+      test:
+        ["CMD-SHELL", "curl -f http://localhost:8003/api/v1/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  inventory-management-service:
+    build: ./inventory-management-service
+    container_name: inventory-management-service
+    ports:
+      - "8004:8004"
+    environment:
+      - AWS_REGION=us-east-1
+      - DYNAMODB_ENDPOINT=http://dynamodb-local:8000
+      - DYNAMODB_INVENTORY_TABLE=inventory
+      - AWS_ACCESS_KEY_ID=local
+      - AWS_SECRET_ACCESS_KEY=local
+      - JWT_SECRET_KEY=smartretailx-super-secret-jwt-key-2024
+      - SQS_ENDPOINT=http://elasticmq:9324
+      - SQS_QUEUE_URL=http://elasticmq:9324/000000000000/orders-queue
+      - NOTIFICATION_QUEUE_URL=http://elasticmq:9324/000000000000/notification-queue
+    depends_on:
+      - dynamodb-local
+      - elasticmq
+    healthcheck:
+      test:
+        ["CMD-SHELL", "curl -f http://localhost:8004/api/v1/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  notification-service:
+    build: ./notification-service
+    container_name: notification-service
+    ports:
+      - "8005:8005"
+    environment:
+      - JWT_SECRET_KEY=smartretailx-super-secret-jwt-key-2024
+      - AWS_REGION=us-east-1
+      - AWS_ACCESS_KEY_ID=local
+      - AWS_SECRET_ACCESS_KEY=local
+      - SQS_ENDPOINT=http://elasticmq:9324
+      - NOTIFICATION_QUEUE_URL=http://elasticmq:9324/000000000000/notification-queue
+      - NOTIFICATION_WEBHOOK_URL=http://notification-service:8005/api/v1/notifications/webhook
+    depends_on:
+      - dynamodb-local
+      - elasticmq
+    healthcheck:
+      test:
+        ["CMD-SHELL", "curl -f http://localhost:8005/api/v1/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3

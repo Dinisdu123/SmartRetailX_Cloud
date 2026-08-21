@@ -1,0 +1,17 @@
+{
+    "BackupPlan": {
+        "BackupPlanName": "smartretailx-backup-plan",
+        "Rules": [
+            {
+                "RuleName": "daily-backups",
+                "TargetBackupVaultName": "smartretailx-backup-vault",
+                "ScheduleExpression": "cron(0 18 * * ? *)",
+                "StartWindowMinutes": 60,
+                "CompletionWindowMinutes": 180,
+                "Lifecycle": {
+                    "DeleteAfterDays": 35
+                }
+            }
+        ]
+    }
+}

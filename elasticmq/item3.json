@@ -1,0 +1,1 @@
+{"product_id": {"S": "SHOES-001"}, "product_name": {"S": "Running Shoes"}, "stock_quantity": {"N": "200"}, "reserved_quantity": {"N": "0"}, "reorder_threshold": {"N": "20"}, "updated_at": {"S": "2026-07-06T00:00:00"}}

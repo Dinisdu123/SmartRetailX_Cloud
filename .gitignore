@@ -1,0 +1,54 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Environment files (NEVER commit these)
+.env
+
+# pytest
+.pytest_cache/
+*.pytest_cache
+
+# VS Code
+.vscode/
+
+# Database files
+*.db
+*.sqlite
+
+# DynamoDB local data
+dynamodb-data/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Node.js
+node_modules/
+.npm/
+.vite/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+
+# Terraform variable files
+*.tfvars
+*.tfvars.json

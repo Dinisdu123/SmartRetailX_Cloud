@@ -1,0 +1,95 @@
+{
+    "containerDefinitions": [
+        {
+            "name": "user-management-service",
+            "image": "029223413210.dkr.ecr.ap-south-1.amazonaws.com/smartretailx/user-management-service:v7",
+            "cpu": 0,
+            "portMappings": [
+                {
+                    "containerPort": 8001,
+                    "hostPort": 8001,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "SQS_NOTIFICATIONS_QUEUE_URL",
+                    "value": "https://sqs.ap-south-1.amazonaws.com/029223413210/smartretailx-notification-queue"
+                },
+                {
+                    "name": "AWS_REGION",
+                    "value": "ap-south-1"
+                },
+                {
+                    "name": "DYNAMODB_PRODUCTS_TABLE",
+                    "value": "smartretailx-products"
+                },
+                {
+                    "name": "DYNAMODB_INVENTORY_TABLE",
+                    "value": "smartretailx-inventory"
+                },
+                {
+                    "name": "SQS_ORDERS_QUEUE_URL",
+                    "value": "https://sqs.ap-south-1.amazonaws.com/029223413210/smartretailx-orders-queue"
+                },
+                {
+                    "name": "SNS_ORDER_EVENTS_TOPIC_ARN",
+                    "value": "arn:aws:sns:ap-south-1:029223413210:smartretailx-order-events"
+                },
+                {
+                    "name": "SERVICE_PORT",
+                    "value": "8001"
+                },
+                {
+                    "name": "DB_NAME",
+                    "value": "smartretailx"
+                }
+            ],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "secrets": [
+                {
+                    "name": "JWT_SECRET_KEY",
+                    "valueFrom": "arn:aws:secretsmanager:ap-south-1:029223413210:secret:smartretailx/jwt-secret-b20U2n:JWT_SECRET_KEY::"
+                },
+                {
+                    "name": "DB_USERNAME",
+                    "valueFrom": "arn:aws:secretsmanager:ap-south-1:029223413210:secret:smartretailx/db-credentials-hSH8MV:username::"
+                },
+                {
+                    "name": "DB_PASSWORD",
+                    "valueFrom": "arn:aws:secretsmanager:ap-south-1:029223413210:secret:smartretailx/db-credentials-hSH8MV:password::"
+                },
+                {
+                    "name": "DB_HOST",
+                    "valueFrom": "arn:aws:secretsmanager:ap-south-1:029223413210:secret:smartretailx/db-credentials-hSH8MV:host::"
+                },
+                {
+                    "name": "JWT_REFRESH_SECRET_KEY",
+                    "valueFrom": "arn:aws:secretsmanager:ap-south-1:029223413210:secret:smartretailx/jwt-secret-b20U2n:JWT_REFRESH_SECRET_KEY::"
+                }
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/smartretailx/user-management-service",
+                    "awslogs-region": "ap-south-1",
+                    "awslogs-stream-prefix": "user-management-service"
+                }
+            },
+            "systemControls": []
+        }
+    ],
+    "family": "smartretailx-user-management-service",
+    "taskRoleArn": "arn:aws:iam::029223413210:role/smartretailx-ecs-task-role",
+    "executionRoleArn": "arn:aws:iam::029223413210:role/smartretailx-ecs-execution-role",
+    "networkMode": "awsvpc",
+    "volumes": [],
+    "placementConstraints": [],
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "256",
+    "memory": "512"
+}

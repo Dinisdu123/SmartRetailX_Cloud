@@ -1,0 +1,102 @@
+{
+    "widgets": [
+        {
+            "type": "text",
+            "x": 0, "y": 0, "width": 24, "height": 1,
+            "properties": { "markdown": "## SmartRetailX Platform — Overview" }
+        },
+        {
+            "type": "metric",
+            "x": 0, "y": 1, "width": 12, "height": 6,
+            "properties": {
+                "title": "ECS CPU utilization by service",
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "ap-south-1",
+                "metrics": [
+                    ["AWS/ECS", "CPUUtilization", "ServiceName", "order-processing-service", "ClusterName", "smartretailx-cluster"],
+                    ["AWS/ECS", "CPUUtilization", "ServiceName", "user-management-service", "ClusterName", "smartretailx-cluster"],
+                    ["AWS/ECS", "CPUUtilization", "ServiceName", "product-catalogue-service", "ClusterName", "smartretailx-cluster"],
+                    ["AWS/ECS", "CPUUtilization", "ServiceName", "inventory-management-service", "ClusterName", "smartretailx-cluster"],
+                    ["AWS/ECS", "CPUUtilization", "ServiceName", "api-gateway", "ClusterName", "smartretailx-cluster"]
+                ],
+                "period": 60,
+                "stat": "Average"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 12, "y": 1, "width": 12, "height": 6,
+            "properties": {
+                "title": "ECS memory utilization by service",
+                "view": "timeSeries",
+                "stacked": false,
+                "region": "ap-south-1",
+                "metrics": [
+                    ["AWS/ECS", "MemoryUtilization", "ServiceName", "order-processing-service", "ClusterName", "smartretailx-cluster"],
+                    ["AWS/ECS", "MemoryUtilization", "ServiceName", "user-management-service", "ClusterName", "smartretailx-cluster"],
+                    ["AWS/ECS", "MemoryUtilization", "ServiceName", "product-catalogue-service", "ClusterName", "smartretailx-cluster"],
+                    ["AWS/ECS", "MemoryUtilization", "ServiceName", "inventory-management-service", "ClusterName", "smartretailx-cluster"],
+                    ["AWS/ECS", "MemoryUtilization", "ServiceName", "api-gateway", "ClusterName", "smartretailx-cluster"]
+                ],
+                "period": 60,
+                "stat": "Average"
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0, "y": 7, "width": 12, "height": 6,
+            "properties": {
+                "title": "ALB request count",
+                "view": "timeSeries",
+                "region": "ap-south-1",
+                "metrics": [
+                    ["AWS/ApplicationELB", "RequestCount", "LoadBalancer", "app/smartretailx-alb/9af1658388e41719", { "stat": "Sum" }]
+                ],
+                "period": 60
+            }
+        },
+        {
+            "type": "metric",
+            "x": 12, "y": 7, "width": 12, "height": 6,
+            "properties": {
+                "title": "ALB target response time",
+                "view": "timeSeries",
+                "region": "ap-south-1",
+                "metrics": [
+                    ["AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", "app/smartretailx-alb/9af1658388e41719", { "stat": "p95", "label": "p95 latency" }],
+                    ["AWS/ApplicationELB", "TargetResponseTime", "LoadBalancer", "app/smartretailx-alb/9af1658388e41719", { "stat": "Average", "label": "avg latency" }]
+                ],
+                "period": 60
+            }
+        },
+        {
+            "type": "metric",
+            "x": 0, "y": 13, "width": 12, "height": 6,
+            "properties": {
+                "title": "ALB error responses",
+                "view": "timeSeries",
+                "region": "ap-south-1",
+                "metrics": [
+                    ["AWS/ApplicationELB", "HTTPCode_Target_5XX_Count", "LoadBalancer", "app/smartretailx-alb/9af1658388e41719", { "stat": "Sum", "label": "5xx from targets" }],
+                    ["AWS/ApplicationELB", "HTTPCode_ELB_5XX_Count", "LoadBalancer", "app/smartretailx-alb/9af1658388e41719", { "stat": "Sum", "label": "5xx from ALB" }]
+                ],
+                "period": 60
+            }
+        },
+        {
+            "type": "metric",
+            "x": 12, "y": 13, "width": 12, "height": 6,
+            "properties": {
+                "title": "RDS CPU and connections",
+                "view": "timeSeries",
+                "region": "ap-south-1",
+                "metrics": [
+                    ["AWS/RDS", "CPUUtilization", "DBInstanceIdentifier", "smartretailx-postgres", { "yAxis": "left", "label": "CPU %" }],
+                    ["AWS/RDS", "DatabaseConnections", "DBInstanceIdentifier", "smartretailx-postgres", { "yAxis": "right", "label": "Connections" }]
+                ],
+                "period": 60
+            }
+        }
+    ]
+}

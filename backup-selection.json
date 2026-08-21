@@ -1,0 +1,9 @@
+{
+    "SelectionName": "smartretailx-core-resources",
+    "IamRoleArn": "arn:aws:iam::029223413210:role/AWSBackupDefaultServiceRole",
+    "Resources": [
+        "arn:aws:rds:ap-south-1:029223413210:db:smartretailx-postgres",
+        "arn:aws:dynamodb:ap-south-1:029223413210:table/smartretailx-products",
+        "arn:aws:dynamodb:ap-south-1:029223413210:table/smartretailx-inventory"
+    ]
+}

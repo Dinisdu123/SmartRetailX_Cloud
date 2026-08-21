@@ -1,0 +1,10 @@
+aws_region = "ap-south-1"
+project_name = "smartretailx"
+environment = "dev"
+
+db_username = "postgres"
+db_password = "Dinidu2005" 
+
+jwt_secret = "6jdJP8ORGkYfbzeMAVSDUsvrHixBl5gI"  
+
+alert_email = "ubetata@outlook.com"  

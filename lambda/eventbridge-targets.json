@@ -1,0 +1,6 @@
+[
+    {
+        "Id": "1",
+        "Arn": "arn:aws:lambda:ap-south-1:029223413210:function:smartretailx-low-stock-checker"
+    }
+]
