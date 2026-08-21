@@ -301,11 +301,10 @@ Simulates a staged load profile (ramp to 20 VUs, sustained load, spike to 50 VUs
 ## Known Issues and Limitations
 
 1. **No HTTPS/TLS** -- the platform currently runs over plain HTTP. CloudFront distribution creation is blocked pending AWS account verification (`AccessDenied: Your account must be verified before you can add new CloudFront resources`). This is the most significant outstanding gap before any production use.
-2. **SQS events are published but not consumed** -- `order-processing-service` publishes `OrderPlaced`/`OrderConfirmed`/etc. events, but no service currently subscribes to them. Inventory stock is not automatically adjusted on order placement.
-3. **Payment Service and Notification Service were not implemented** -- scoped in the original design, deferred due to time constraints.
-4. **401/403 inconsistency** -- some endpoints return `401` for missing authentication, others return the FastAPI/Starlette `HTTPBearer` default of `403`. Found via integration testing, not yet standardised.
-5. **Distributed tracing not instrumented** -- see Monitoring section above.
-6. **DR restore procedure is documented but not drilled** -- backup creation has been verified, but a full restore-and-cutover exercise has not been performed.
+2. **Payment Service and Notification Service were not implemented** -- scoped in the original design, deferred due to time constraints.
+3. **401/403 inconsistency** -- some endpoints return `401` for missing authentication, others return the FastAPI/Starlette `HTTPBearer` default of `403`. Found via integration testing, not yet standardised.
+4. **Distributed tracing not instrumented** -- see Monitoring section above.
+5. **DR restore procedure is documented but not drilled** -- backup creation has been verified, but a full restore-and-cutover exercise has not been performed.
 
 
 ---
@@ -314,15 +313,13 @@ Simulates a staged load profile (ramp to 20 VUs, sustained load, spike to 50 VUs
 
 In priority order:
 
-1. Implement an SQS consumer in `inventory-management-service` to automatically adjust stock on order events (Saga pattern with compensating actions)
-2. Complete AWS account verification and deploy CloudFront + ACM for end-to-end HTTPS
-3. Increase `user-management-service` CPU allocation and re-tune the bcrypt thread pool based on load-test findings
-4. Implement the Payment Service and a real event-driven Notification Service
-5. Extend to multi-region deployment (RDS cross-region replica or Aurora Global Database, DynamoDB Global Tables, Route 53 latency-based routing)
-6. Instrument AWS X-Ray distributed tracing across all services
-7. Standardise authentication error codes across all services
-8. Perform a full disaster recovery restore drill to empirically validate RTO estimates
-9. Introduce Infrastructure as Code (CloudFormation/Terraform/CDK) to replace manual AWS CLI provisioning
+1. Complete AWS account verification and deploy CloudFront + ACM for end-to-end HTTPS
+2. Increase `user-management-service` CPU allocation and re-tune the bcrypt thread pool based on load-test findings
+3. Implement the Payment Service and a real event-driven Notification Service
+4. Instrument AWS X-Ray distributed tracing across all services
+5. Standardise authentication error codes across all services
+6. Perform a full disaster recovery restore drill to empirically validate RTO estimates
+7. Introduce Infrastructure as Code (CloudFormation/Terraform/CDK) to replace manual AWS CLI provisioning
 
 ---
 
